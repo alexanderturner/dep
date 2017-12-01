@@ -101,7 +101,7 @@ func (s *S) SetUpSuite(c *C) {
 	}
 	handler := appHandler(s.hc)
 	s.srv = httptest.NewServer(handler)
-	client, err := controller.NewClient(s.srv.URL, authKey)
+	client, err := controller.NewClient(s.srv.URL, authKey, "", "")
 	c.Assert(err, IsNil)
 	s.c = client
 }
@@ -703,7 +703,7 @@ func (s *S) TestGetCACertWithAuth(c *C) {
 }
 
 func (s *S) TestGetCACertWithInvalidAuth(c *C) {
-	client, err := controller.NewClient(s.srv.URL, "invalid-key")
+	client, err := controller.NewClient(s.srv.URL, "invalid-key", "", "")
 	c.Assert(err, IsNil)
 	cert, err := client.GetCACert()
 	c.Assert(err, Not(IsNil))
@@ -712,7 +712,7 @@ func (s *S) TestGetCACertWithInvalidAuth(c *C) {
 }
 
 func (s *S) TestGetCACertWithoutAuth(c *C) {
-	client, err := controller.NewClient(s.srv.URL, "")
+	client, err := controller.NewClient(s.srv.URL, "", "", "")
 	c.Assert(err, IsNil)
 	cert, err := client.GetCACert()
 	c.Assert(err, IsNil)

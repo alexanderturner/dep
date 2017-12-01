@@ -160,17 +160,18 @@ func runClusterAdd(args *docopt.Args) error {
 		DockerPushURL: args.String["--docker-push-url"],
 		TLSPin:        args.String["--tls-pin"],
 	}
-
-	var usr string
-	fmt.Print("Industrie&Co Authentication\nUsername:")
-	fmt.Scanln(&usr)
-	fmt.Print("Password:")
-	pwd, err := terminal.ReadPassword(0)
-	if err == nil {
-		fmt.Println("Password typed: " + string(pwd))
+	if s.Key == "" {
+		var usr string
+		fmt.Print("Industrie&Co Authentication\nUsername:")
+		fmt.Scanln(&usr)
+		fmt.Print("Password:")
+		pwd, err := terminal.ReadPassword(0)
+		if err == nil {
+			fmt.Println("Password typed: " + string(pwd))
+		}
+		s.Password = encrypt(string(pwd))
+		s.User = usr
 	}
-	s.Password = encrypt(string(pwd))
-	s.User = usr
 	domain := args.String["<domain>"]
 	if strings.HasPrefix(domain, "https://") {
 		s.ControllerURL = domain

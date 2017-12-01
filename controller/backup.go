@@ -130,7 +130,7 @@ func (c *controllerAPI) createAndStreamBackup(ctx context.Context, w http.Respon
 		}
 	}
 
-	client, err := controller.NewClient("", c.config.keys[0])
+	client, err := controller.NewClient("", c.config.keys[0], "", "")
 	if err != nil {
 		handleError(err)
 		return
