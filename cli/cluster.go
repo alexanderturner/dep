@@ -20,6 +20,7 @@ import (
 	"github.com/flynn/flynn/pkg/backup"
 	"github.com/flynn/flynn/pkg/shutdown"
 	"github.com/flynn/go-docopt"
+	"golang.org/x/crypto/ssh/terminal"
 )
 
 func init() {
@@ -155,12 +156,21 @@ func runClusterAdd(args *docopt.Args) error {
 	s := &cfg.Cluster{
 		Name:          args.String["<cluster-name>"],
 		Key:           args.String["--key"],
-		User:          args.String["--user"],
 		GitURL:        args.String["--git-url"],
 		DockerPushURL: args.String["--docker-push-url"],
 		TLSPin:        args.String["--tls-pin"],
 	}
-	s.Password = encrypt(args.String["--password"])
+
+	var usr string
+	fmt.Print("Industrie&Co Authentication\nUsername:")
+	fmt.Scanln(&usr)
+	fmt.Print("Password:")
+	pwd, err := terminal.ReadPassword(0)
+	if err == nil {
+		fmt.Println("Password typed: " + string(pwd))
+	}
+	s.Password = encrypt(string(pwd))
+	s.User = usr
 	domain := args.String["<domain>"]
 	if strings.HasPrefix(domain, "https://") {
 		s.ControllerURL = domain
