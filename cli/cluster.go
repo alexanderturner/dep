@@ -25,7 +25,7 @@ import (
 func init() {
 	register("cluster", runCluster, `
 usage: flynn cluster
-       flynn cluster add [-f] [-d] [--git-url <giturl>] [--no-git] [--docker-push-url <url>] [--docker] [-p <tlspin>] <cluster-name> <domain> <key>
+       flynn cluster add [-f] [-d] [--git-url <giturl>] [--no-git] [--docker-push-url <url>] [--docker] [-p <tlspin>] [--key=<key>] [--user <user>] [--password <password>] <cluster-name> <domain>
        flynn cluster remove <cluster-name>
        flynn cluster default [<cluster-name>]
        flynn cluster migrate-domain <domain>
@@ -44,6 +44,8 @@ Commands:
         Adds <cluster-name> to the ~/.flynnrc configuration file.
 
         options:
+						--user=<user>							Industrie OneLogin Username
+						--password=<password>			Industrie OneLogin Password
             -f, --force               force add cluster
             -d, --default             set as default cluster
             --git-url=<giturl>        git URL
@@ -126,7 +128,7 @@ func runCluster(args *docopt.Args) error {
 	w := tabWriter()
 	defer w.Flush()
 
-	listRec(w, "NAME", "CONTROLLER URL", "GIT URL", "DOCKER URL")
+	listRec(w, "NAME", "CONTROLLER URL", "GIT URL", "DOCKER URL", "USER")
 	for _, s := range config.Clusters {
 		gitURL := s.GitURL
 		if gitURL == "" {
@@ -136,7 +138,11 @@ func runCluster(args *docopt.Args) error {
 		if dockerURL == "" {
 			dockerURL = "(none)"
 		}
-		data := []interface{}{s.Name, s.ControllerURL, gitURL, dockerURL}
+		User := s.User
+		if User == "" {
+			User = "(none)"
+		}
+		data := []interface{}{s.Name, s.ControllerURL, gitURL, dockerURL, User}
 		if s.Name == config.Default {
 			data = append(data, "(default)")
 		}
@@ -148,24 +154,26 @@ func runCluster(args *docopt.Args) error {
 func runClusterAdd(args *docopt.Args) error {
 	s := &cfg.Cluster{
 		Name:          args.String["<cluster-name>"],
-		Key:           args.String["<key>"],
+		Key:           args.String["--key"],
+		User:          args.String["--user"],
 		GitURL:        args.String["--git-url"],
 		DockerPushURL: args.String["--docker-push-url"],
 		TLSPin:        args.String["--tls-pin"],
 	}
+	s.Password = encrypt(args.String["--password"])
 	domain := args.String["<domain>"]
 	if strings.HasPrefix(domain, "https://") {
 		s.ControllerURL = domain
 	} else {
 		s.ControllerURL = "https://controller." + domain
 	}
+
 	if s.GitURL == "" && !args.Bool["--no-git"] {
 		s.GitURL = "https://git." + domain
 	}
 	if s.DockerPushURL == "" && args.Bool["--docker"] {
 		s.DockerPushURL = "https://docker." + domain
 	}
-
 	if err := config.Add(s, args.Bool["--force"]); err != nil {
 		return err
 	}

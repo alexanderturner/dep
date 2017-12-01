@@ -77,6 +77,8 @@ func (c *Client) prepareReq(method, rawurl string, header http.Header, in interf
 	req.Header = header
 	if c.Key != "" {
 		req.SetBasicAuth("", c.Key)
+	} else {
+		req.SetBasicAuth(c.User, c.Password)
 	}
 	if c.Host != "" {
 		req.Host = c.Host
