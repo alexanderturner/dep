@@ -38,6 +38,8 @@ type Client struct {
 	ErrNotFound error
 	URL         string
 	Key         string
+	User        string
+	Password    string
 	Host        string
 	HTTP        *http.Client
 	HijackDial  DialFunc

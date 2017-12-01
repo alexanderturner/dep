@@ -20,6 +20,8 @@ var ErrNoDockerPushURL = errors.New("ERROR: Docker push URL not configured, set 
 type Cluster struct {
 	Name          string `json:"name"`
 	Key           string `json:"key"`
+	User          string `json:"user"`
+	Password      string `json:"password"`
 	TLSPin        string `json:"tls_pin" toml:"TLSPin,omitempty"`
 	ControllerURL string `json:"controller_url"`
 	GitURL        string `json:"git_url"`
@@ -35,7 +37,7 @@ func (c *Cluster) Client() (controller.Client, error) {
 			return nil, fmt.Errorf("error decoding tls pin: %s", err)
 		}
 	}
-	return controller.NewClientWithConfig(c.ControllerURL, c.Key, controller.Config{Pin: pin})
+	return controller.NewClientWithConfig(c.ControllerURL, c.Key, c.User, c.Password, controller.Config{Pin: pin})
 }
 
 func (c *Cluster) DockerPushHost() (string, error) {

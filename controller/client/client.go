@@ -113,11 +113,13 @@ var ErrNotFound = errors.New("controller: resource not found")
 
 // newClient creates a generic Client object, additional attributes must
 // be set by the caller
-func newClient(key string, url string, http *http.Client) *v1controller.Client {
+func newClient(key string, user string, password string, url string, http *http.Client) *v1controller.Client {
 	c := &v1controller.Client{
 		Client: &httpclient.Client{
 			ErrNotFound: ErrNotFound,
 			Key:         key,
+			User:        user,
+			Password:    password,
 			URL:         url,
 			HTTP:        http,
 		},
@@ -127,11 +129,11 @@ func newClient(key string, url string, http *http.Client) *v1controller.Client {
 
 // NewClient creates a new Client pointing at uri and using key for
 // authentication.
-func NewClient(uri, key string) (Client, error) {
-	return NewClientWithHTTP(uri, key, httphelper.RetryClient)
+func NewClient(uri, key string, user string, password string) (Client, error) {
+	return NewClientWithHTTP(uri, key, user, password, httphelper.RetryClient)
 }
 
-func NewClientWithHTTP(uri, key string, httpClient *http.Client) (Client, error) {
+func NewClientWithHTTP(uri, key string, user string, password string, httpClient *http.Client) (Client, error) {
 	if uri == "" {
 		uri = "http://controller.discoverd"
 	}
@@ -139,20 +141,20 @@ func NewClientWithHTTP(uri, key string, httpClient *http.Client) (Client, error)
 	if err != nil {
 		return nil, err
 	}
-	return newClient(key, u.String(), httpClient), nil
+	return newClient(key, user, password, u.String(), httpClient), nil
 }
 
 // NewClientWithConfig acts like NewClient, but supports custom configuration.
-func NewClientWithConfig(uri, key string, config Config) (Client, error) {
+func NewClientWithConfig(uri, key string, user string, password string, config Config) (Client, error) {
 	if config.Pin == nil {
-		return NewClient(uri, key)
+		return NewClient(uri, key, user, password)
 	}
 	d := &pinned.Config{Pin: config.Pin}
 	if config.Domain != "" {
 		d.Config = &tls.Config{ServerName: config.Domain}
 	}
 	httpClient := &http.Client{Transport: &http.Transport{DialTLS: d.Dial}}
-	c := newClient(key, uri, httpClient)
+	c := newClient(key, user, password, uri, httpClient)
 	c.Host = config.Domain
 	c.HijackDial = d.Dial
 	return c, nil
