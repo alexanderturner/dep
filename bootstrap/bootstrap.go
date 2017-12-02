@@ -47,7 +47,7 @@ func (s *State) ControllerClient() (controller.Client, error) {
 		if err != nil {
 			return nil, err
 		}
-		cc, err := controller.NewClient("http://"+instances[0].Addr, s.controllerKey)
+		cc, err := controller.NewClient("http://"+instances[0].Addr, s.controllerKey, "", "")
 		if err != nil {
 			return nil, err
 		}

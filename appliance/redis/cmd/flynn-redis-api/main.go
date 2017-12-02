@@ -101,7 +101,7 @@ func (m *Main) ParseFlags(args []string) error {
 	m.Handler.RedisImageID = os.Getenv("REDIS_IMAGE_ID")
 
 	// Connect to controller.
-	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"))
+	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"), "", "")
 	if err != nil {
 		m.Logger.Error("cannot connect to controller", "err", err)
 		return err

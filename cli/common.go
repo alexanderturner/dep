@@ -44,10 +44,9 @@ func promptReplaceRemote(remote string) (bool, error) {
 	return true, nil
 }
 
-// encrypt string to base64 crypto using AES
 func encrypt(text string) string {
 	// key := []byte(keyText)
-	key := []byte("5OAksWdoynxMJsRnB8AWvPFqW2v0Kg1g")
+	key := []byte("bkRXCT9DGnJuEEmjwyMzq4mSa6nkXFqo")
 	plaintext := []byte(text)
 
 	block, err := aes.NewCipher(key)
@@ -72,7 +71,7 @@ func encrypt(text string) string {
 
 // decrypt from base64 to decrypted string
 func decrypt(cryptoText string) string {
-	key := []byte("5OAksWdoynxMJsRnB8AWvPFqW2v0Kg1g")
+	key := []byte("bkRXCT9DGnJuEEmjwyMzq4mSa6nkXFqo")
 	ciphertext, _ := base64.URLEncoding.DecodeString(cryptoText)
 
 	block, err := aes.NewCipher(key)
@@ -82,6 +81,7 @@ func decrypt(cryptoText string) string {
 
 	// The IV needs to be unique, but not secure. Therefore it's common to
 	// include it at the beginning of the ciphertext.
+	fmt.Printf("BlockSize:%d\n", aes.BlockSize)
 	if len(ciphertext) < aes.BlockSize {
 		panic("ciphertext too short")
 	}

@@ -40,7 +40,7 @@ func main() {
 	log.SetOutput(conf.logOut)
 
 	httpClient := &http.Client{}
-	client, err := cc.NewClientWithHTTP("", conf.controllerKey, httpClient)
+	client, err := cc.NewClientWithHTTP("", conf.controllerKey, "", "", httpClient)
 	if err != nil {
 		log.Fatal(err)
 	}

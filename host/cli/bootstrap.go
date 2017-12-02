@@ -524,7 +524,7 @@ WHERE release_id = (SELECT release_id FROM apps WHERE name = 'dashboard' AND del
 		return fmt.Errorf("error getting controller instance: %s", err)
 	}
 	controllerKey := data.Controller.Release.Env["AUTH_KEY"]
-	client, err := controller.NewClient("http://"+controllerInstances[0].Addr, controllerKey)
+	client, err := controller.NewClient("http://"+controllerInstances[0].Addr, controllerKey, "", "")
 	if err != nil {
 		return err
 	}

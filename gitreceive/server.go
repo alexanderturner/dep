@@ -37,7 +37,7 @@ func main() {
 	if key == "" {
 		log.Fatal("missing CONTROLLER_KEY env var")
 	}
-	cc, err := controller.NewClient("", key)
+	cc, err := controller.NewClient("", key, "", "")
 	if err != nil {
 		log.Fatalln("Unable to connect to controller:", err)
 	}

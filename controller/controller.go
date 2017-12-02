@@ -339,7 +339,7 @@ func muxHandler(main http.Handler, authKeys []string) http.Handler {
 			w.WriteHeader(200)
 			return
 		}
-		_, password, _ := r.BasicAuth()
+		username, password, _ := r.BasicAuth()
 		if password == "" && r.URL.Path == "/ca-cert" {
 			main.ServeHTTP(w, r)
 			return
@@ -348,6 +348,15 @@ func muxHandler(main http.Handler, authKeys []string) http.Handler {
 			password = r.URL.Query().Get("key")
 		}
 		var authed bool
+		if username != "" && password != "" {
+			authstatus, err := OneloginAuth(username, password)
+			if err != nil {
+				log.Fatal(err)
+			}
+			if authstatus {
+				authed = true
+			}
+		}
 		for _, k := range authKeys {
 			if len(password) == len(k) && subtle.ConstantTimeCompare([]byte(password), []byte(k)) == 1 {
 				authed = true

@@ -31,7 +31,7 @@ func main() {
 	ctx = context.WithValue(ctx, "version", version.String())
 	ctx = context.WithLogger(ctx, context.GetLogger(ctx, "version"))
 
-	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"))
+	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"), "", "")
 	if err != nil {
 		context.GetLogger(ctx).Fatalln(err)
 	}

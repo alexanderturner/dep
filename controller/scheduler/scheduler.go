@@ -166,7 +166,7 @@ func main() {
 
 	log.Info("creating cluster and controller clients")
 	clusterClient := utils.ClusterClientWrapper(cluster.NewClientWithHTTP(nil, httpClient))
-	controllerClient, err := controller.NewClient("", os.Getenv("AUTH_KEY"))
+	controllerClient, err := controller.NewClient("", os.Getenv("AUTH_KEY"), "", "")
 	if err != nil {
 		log.Error("error creating controller client", "err", err)
 		shutdown.Fatal(err)

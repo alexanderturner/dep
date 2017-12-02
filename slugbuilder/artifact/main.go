@@ -48,7 +48,7 @@ func main() {
 }
 
 func run(dir string, uid, gid int) error {
-	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"))
+	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"), "", "")
 	if err != nil {
 		return err
 	}

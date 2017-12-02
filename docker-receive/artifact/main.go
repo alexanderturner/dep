@@ -32,7 +32,7 @@ func main() {
 }
 
 func run(url string) error {
-	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"))
+	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"), "", "")
 	if err != nil {
 		return err
 	}

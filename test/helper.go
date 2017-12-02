@@ -201,7 +201,7 @@ func (h *Helper) bootClusterWithConfig(t *c.C, conf *cluster2.BootConfig) *Clust
 	x.cluster = cluster.NewClientWithServices(x.discoverd.Service)
 	pin, err := base64.StdEncoding.DecodeString(s.Pin)
 	t.Assert(err, c.IsNil)
-	x.controller, _ = controller.NewClientWithConfig("https://controller."+s.Domain, s.Key, controller.Config{Pin: pin})
+	x.controller, _ = controller.NewClientWithConfig("https://controller."+s.Domain, s.Key, "", "", controller.Config{Pin: pin})
 
 	Hostnames.Add(t, s.IP, "controller."+s.Domain, "git."+s.Domain, "docker."+s.Domain, "dashboard."+s.Domain)
 

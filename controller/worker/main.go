@@ -28,7 +28,7 @@ func main() {
 	log := logger.New("fn", "main")
 
 	log.Info("creating controller client")
-	client, err := controller.NewClient("", os.Getenv("AUTH_KEY"))
+	client, err := controller.NewClient("", os.Getenv("AUTH_KEY"), "", "")
 	if err != nil {
 		log.Error("error creating controller client", "err", err)
 		shutdown.Fatal(err)

@@ -77,7 +77,7 @@ func run() error {
 		log.Error("error looking up controller in service discovery", "err", err)
 		return err
 	}
-	client, err := controller.NewClient("", instances[0].Meta["AUTH_KEY"])
+	client, err := controller.NewClient("", instances[0].Meta["AUTH_KEY"], "", "")
 	if err != nil {
 		log.Error("error creating controller client", "err", err)
 		return err

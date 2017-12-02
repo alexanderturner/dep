@@ -49,7 +49,7 @@ func main() {
 }
 
 func run() error {
-	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"))
+	client, err := controller.NewClient("", os.Getenv("CONTROLLER_KEY"), "", "")
 	if err != nil {
 		return fmt.Errorf("Unable to connect to controller: %s", err)
 	}

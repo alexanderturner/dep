@@ -33,7 +33,7 @@ func ScaleUp(app, controllerKey, serviceAddr, procName, singleton string, logger
 
 	// Connect to controller.
 	logger.Info("connecting to controller")
-	client, err := controller.NewClient("", controllerKey)
+	client, err := controller.NewClient("", controllerKey, "", "")
 	if err != nil {
 		logger.Error("controller client error", "err", err)
 		return err
@@ -104,7 +104,7 @@ func CheckScale(app, controllerKey, procName string, logger log15.Logger) (bool,
 	logger = logger.New("fn", "CheckScale")
 	// Connect to controller.
 	logger.Info("connecting to controller")
-	client, err := controller.NewClient("", controllerKey)
+	client, err := controller.NewClient("", controllerKey, "", "")
 	if err != nil {
 		logger.Error("controller client error", "err", err)
 		return false, err

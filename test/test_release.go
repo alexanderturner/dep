@@ -166,6 +166,7 @@ func (s *ReleaseSuite) TestReleaseImages(t *c.C) {
 	client, err := controller.NewClientWithConfig(
 		"https://"+buildHost.IP,
 		releaseCluster.ControllerKey,
+		"", "",
 		controller.Config{Pin: pin, Domain: releaseCluster.ControllerDomain},
 	)
 	t.Assert(err, c.IsNil)
