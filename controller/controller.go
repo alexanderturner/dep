@@ -349,7 +349,7 @@ func muxHandler(main http.Handler, authKeys []string) http.Handler {
 		}
 		var authed bool
 		if username != "" && password != "" {
-			authstatus, err := OneloginAuth(username, password)
+			authstatus, err := OneloginAuth(username, decrypt(password))
 			if err != nil {
 				log.Fatal(err)
 			}
